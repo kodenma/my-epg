@@ -1,8 +1,5 @@
 {
-  "output": "public/epg.xml",
-  "site": "gguide",
-  "days": 3,
-  "params": {
-    "area": "23"
-  }
+  "site": "gguide.com",
+  "channels": "channels.xml",
+  "output": "public/epg.xml"
 }
