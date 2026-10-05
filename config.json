@@ -1,10 +1,11 @@
 {
+  "output": "public/epg.xml",
   "sites": [
     {
       "name": "gguide",
       "active": true,
       "params": {
-        "area": "23" 
+        "area": "23"
       }
     }
   ],
