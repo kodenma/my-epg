@@ -1,0 +1,12 @@
+{
+  "sites": [
+    {
+      "name": "gguide",
+      "active": true,
+      "params": {
+        "area": "23" 
+      }
+    }
+  ],
+  "days": 3
+}
