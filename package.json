@@ -4,7 +4,7 @@
   "description": "EPG Generator with epg-grabber",
   "main": "index.js",
   "scripts": {
-    "grab": "epg-grabber --config=config.js --output=public/epg.xml"
+    "grab": "epg-grabber --config=config.js"
   },
   "dependencies": {
     "epg-grabber": "^0.3.0"
