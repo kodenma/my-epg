@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?><tv>
+<channel id="NHKGeneral.jp"><display-name>NHK総合</display-name></channel>
+<channel id="EETV.jp"><display-name>Eテレ</display-name></channel>
+<channel id="NTV.jp"><display-name>日本テレビ</display-name></channel>
+<channel id="TBS.jp"><display-name>TBS</display-name></channel>
+<channel id="FujiTV.jp"><display-name>フジテレビ</display-name></channel>
+<channel id="TVAsahi.jp"><display-name>テレビ朝日</display-name></channel>
+<channel id="TVTokyo.jp"><display-name>テレビ東京</display-name></channel>
+</tv>
