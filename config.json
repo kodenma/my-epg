@@ -1,0 +1,6 @@
+{
+  "site": "gguide.com",
+  "channels": "channels.xml",
+  "output": "public/epg.xml",
+  "url": "https://bangumi.org/epg/td"
+}
