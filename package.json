@@ -1,0 +1,12 @@
+{
+  "name": "my-epg-generator",
+  "version": "1.0.0",
+  "description": "EPG Generator with epg-grabber",
+  "main": "index.js",
+  "scripts": {
+    "grab": "epg-grabber --config config.json --output public/epg.xml"
+  },
+  "dependencies": {
+    "epg-grabber": "^0.3.0"
+  }
+}
