@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site site="gguide.com">
   <channels>
-    <channel lang="ja" xmltv_id="NHKGeneral.jp" site_id="23_1024">NHK総合</channel>
-    <channel lang="ja" xmltv_id="EETV.jp" site_id="23_1032">Eテレ</channel>
-    <channel lang="ja" xmltv_id="NTV.jp" site_id="23_1040">日本テレビ</channel>
-    <channel lang="ja" xmltv_id="TBS.jp" site_id="23_1048">TBS</channel>
-    <channel lang="ja" xmltv_id="FujiTV.jp" site_id="23_1056">フジテレビ</channel>
-    <channel lang="ja" xmltv_id="TVAsahi.jp" site_id="23_1064">テレビ朝日</channel>
-    <channel lang="ja" xmltv_id="TVTokyo.jp" site_id="23_1072">テレビ東京</channel>
+    <channel lang="ja" xmltv_id="NHKGeneral.jp" site_id="101016">NHK総合</channel>
+    <channel lang="ja" xmltv_id="EETV.jp" site_id="101024">Eテレ</channel>
+    <channel lang="ja" xmltv_id="NTV.jp" site_id="101040">日本テレビ</channel>
+    <channel lang="ja" xmltv_id="TBS.jp" site_id="101056">TBS</channel>
+    <channel lang="ja" xmltv_id="FujiTV.jp" site_id="101064">フジテレビ</channel>
+    <channel lang="ja" xmltv_id="TVAsahi.jp" site_id="101048">テレビ朝日</channel>
+    <channel lang="ja" xmltv_id="TVTokyo.jp" site_id="101072">テレビ東京</channel>
   </channels>
 </site>
