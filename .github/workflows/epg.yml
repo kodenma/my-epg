@@ -16,28 +16,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Download, Filter, and Prepare Custom EPG
+      - name: Download and prepare Custom Japan EPG
         run: |
           mkdir -p public
 
-          # 1. 安定ソースから元データをダウンロード
-          echo "Downloading source EPG..."
-          curl -f -s -L -A "Mozilla/5.0" "https://epg.pw/xmltv/epg_JP.xml.gz" -o public/raw_epg.xml.gz
-          gunzip -f public/raw_epg.xml.gz
+          # Custom_JP1.xml と完全同一のID体系を持つ本家ソースから直接取得
+          EPG_URL="https://animenosekai.github.io/japanterebi-xmltv/guide.xml"
 
-          # 2. Custom_JP1.xml 向けにID・局名を自動変換
-          python filter_epg.py
+          echo "Downloading EPG from ${EPG_URL}..."
+          curl -f -s -L -A "Mozilla/5.0" "${EPG_URL}" -o public/epg.xml
 
-          # 3. 一時元ファイルを削除し、完成版をgzip圧縮
-          rm -f public/raw_epg.xml
+          # TiviMate 用に gzip 圧縮版も同時に生成
+          echo "Compressing epg.xml.gz..."
           gzip -k -f public/epg.xml
 
-          # 結果確認
+          # 生成ファイルの確認
           ls -lh public/
 
       - name: Deploy to GitHub Pages
