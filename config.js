@@ -1,17 +1,6 @@
 const cheerio = require('cheerio');
 const dayjs = require('dayjs');
 
-// channels.xml の ID と Gガイド(bangumi.org) 放送局IDの対応表（関東主要局）
-const CHANNEL_MAP = {
-  'NHKGeneral.jp': '101016', // NHK総合
-  'EETV.jp':       '101024', // Eテレ
-  'NTV.jp':        '101040', // 日本テレビ
-  'TVAsahi.jp':    '101048', // テレビ朝日
-  'TBS.jp':        '101056', // TBS
-  'TVTokyo.jp':    '101072', // テレビ東京
-  'FujiTV.jp':     '101064'  // フジテレビ
-};
-
 module.exports = {
   site: 'gguide.com',
   channels: 'channels.xml',
@@ -22,17 +11,19 @@ module.exports = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     }
   },
-  url: function ({ channel }) {
-    const siteId = CHANNEL_MAP[channel.site_id] || channel.site_id;
-    return `https://bangumi.org/epg/td?gg_id=${siteId}`;
+  url: function ({ channel, date }) {
+    // channels.xml の site_id をそのまま利用
+    // 日付指定が必要な場合はクエリパラメータを追加 (例: &date=YYYYMMDD)
+    const targetDate = dayjs(date).format('YYYYMMDD');
+    return `https://bangumi.org/epg/td?gg_id=${channel.site_id}&date=${targetDate}`;
   },
-  parser: function ({ content }) {
+  parser: function ({ content, date }) {
     const $ = cheerio.load(content);
     const programs = [];
 
-    // Gガイドの番組枠要素から情報を抽出
+    // ※実際のHTMLソースに合わせてセレクタ・属性名を調整してください
     $('.cell-schedule, .program, [data-start]').each((_, el) => {
-      const $item =$(el);
+      const $item = $(el);
       const title = $item.find('.title, .program_title, a').first().text().trim();
       const desc = $item.find('.detail, .desc, .summary').text().trim();
       const startTime = $item.attr('data-start');
