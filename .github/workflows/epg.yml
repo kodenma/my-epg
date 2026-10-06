@@ -1,44 +1,42 @@
-name: Generate EPG
+name: Auto Update Japan EPG
 
 on:
   schedule:
-    # 毎日日本時間 午前4:00 (UTC 19:00) に自動実行
-    - cron: '0 19 * * *'
-  # 手動実行ボタンを有効化
+    # 毎日 日本時間 午前5:00（UTC 20:00）に自動実行
+    - cron: '0 20 * * *'
+  # GitHubのWeb画面からいつでも手動実行可能
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
-  build-and-deploy:
+  update-epg:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm ci || npm install
-
-      - name: Create output directory
-        run: mkdir -p public
-
-      - name: Run EPG Grabber
-        run: npm run grab
-
-      - name: Compress EPG XML
+      - name: Download and prepare EPG
         run: |
-          gzip -k -f public/epg.xml
+          mkdir -p public
+
+          # iptv-org が毎日生成している日本向けEPG (J:COMベース) を取得
+          EPG_SOURCE_URL="https://iptv-org.github.io/epg/guides/jp/tvguide.myjcom.jp.epg.xml.gz"
+
+          echo "Downloading EPG from ${EPG_SOURCE_URL}..."
+          curl -f -L "${EPG_SOURCE_URL}" -o public/epg.xml.gz
+
+          # 非圧縮版も同時に生成（プレイヤーの仕様に合わせて両方提供）
+          echo "Decompressing epg.xml..."
+          gunzip -k -f public/epg.xml.gz
+
+          # ファイルサイズと中身の確認
+          ls -lh public/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          keep_files: false
+          publish_branch: gh-pages
