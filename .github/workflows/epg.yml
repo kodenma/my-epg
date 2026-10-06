@@ -2,7 +2,7 @@ name: Auto Update Japan EPG
 
 on:
   schedule:
-    # 毎日 日本時間 午前5:00（UTC 20:00）に自動更新
+    # 毎日 日本時間 午前5:00 (UTC 20:00)
     - cron: '0 20 * * *'
   workflow_dispatch:
 
@@ -16,47 +16,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download and prepare EPG with fallback
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download, Filter, and Prepare Custom EPG
         run: |
           mkdir -p public
 
-          # 信頼性の高い日本向けEPGソース（優先順位順）
-          SOURCES=(
-            "https://epg.pw/xmltv/epg_JP.xml.gz"
-            "https://animenosekai.github.io/japanterebi-xmltv/guide.xml"
-            "https://raw.githubusercontent.com/karenda-jp/etc/main/guides.xml"
-          )
+          # 1. 安定ソースから元データをダウンロード
+          echo "Downloading source EPG..."
+          curl -f -s -L -A "Mozilla/5.0" "https://epg.pw/xmltv/epg_JP.xml.gz" -o public/raw_epg.xml.gz
+          gunzip -f public/raw_epg.xml.gz
 
-          SUCCESS=0
-          for url in "${SOURCES[@]}"; do
-            echo "----------------------------------------"
-            echo "Attempting to download from: ${url}"
-            
-            if [[ "$url" == *.gz ]]; then
-              if curl -f -s -L -A "Mozilla/5.0" "$url" -o public/epg.xml.gz; then
-                echo "Download succeeded. Decompressing..."
-                gunzip -k -f public/epg.xml.gz
-                SUCCESS=1
-                break
-              fi
-            else
-              if curl -f -s -L -A "Mozilla/5.0" "$url" -o public/epg.xml; then
-                echo "Download succeeded. Compressing..."
-                gzip -k -f public/epg.xml
-                SUCCESS=1
-                break
-              fi
-            fi
-            echo "Failed to fetch from ${url}. Trying next source..."
-          done
+          # 2. Custom_JP1.xml 向けにID・局名を自動変換
+          python filter_epg.py
 
-          if [ $SUCCESS -eq 0 ]; then
-            echo "Error: All EPG sources failed."
-            exit 1
-          fi
+          # 3. 一時元ファイルを削除し、完成版をgzip圧縮
+          rm -f public/raw_epg.xml
+          gzip -k -f public/epg.xml
 
-          echo "----------------------------------------"
-          echo "EPG files successfully created:"
+          # 結果確認
           ls -lh public/
 
       - name: Deploy to GitHub Pages
